@@ -1,0 +1,91 @@
+﻿@model X.PagedList.IPagedList<Tutorial.Models.Student>
+@using X.PagedList.Mvc.Core;
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+<div style="display:flex;flex-direction:row;justify-content:space-between;align-items: center;">
+    <div>
+        <p>
+            <a asp-action="Create" class="btn btn-primary">Create New</a>
+        </p>
+    </div>
+    <div>
+        @using (Html.BeginForm("Index", "Students", FormMethod.Get, "form-inline"))
+        {
+            <div class="form-group" style="
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-end;
+                align-items: center;
+            ">
+                <div>
+
+                    @Html.TextBox("SearchString",  ViewBag.CurrentFilter as string, new { @class = "form-control mx-sm-3", @placeholder = "Search" })
+                </div>
+                <div style="margin:22px;">
+                    <input class=" btn btn-primary" type="submit" value="Search" />
+                </div>
+
+            </div>
+
+
+
+        }
+    </div>
+
+</div>
+   
+       
+       
+  
+   
+ 
+            <table class="table table-bordered">
+                <thead class="bg-info text-white">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FirstOrDefault().Name)
+                        </th>
+                        <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Age)
+                        </th>
+                        <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().DateofBirth)
+                        </th>
+                        <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Address)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Age)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DateofBirth)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Address)
+                            </td>
+                            <td >
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary">Edit</a>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-success">Details</a> 
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("Index",new { page, currentFilter = ViewBag.CurrentFilter }))
